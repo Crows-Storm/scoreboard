@@ -80,3 +80,5 @@ go.sum.backup
 
 # Air live reload
 tmp/
+
+.cache
