@@ -1,0 +1,4 @@
+./openapi_client.gen.go
+./openapi_types.gen.go
+./room.pb.go
+./room_grpc.pb.go

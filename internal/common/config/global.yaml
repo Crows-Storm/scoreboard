@@ -1,0 +1,17 @@
+room:
+  service-name: room
+  servicer-to-run: http
+  http-addr: 127.0.0.1:8081
+
+
+users:
+  service-name: users
+  servicer-to-run: http
+  http-addr: 127.0.0.1:8082
+
+
+
+redis:
+  host: localhost
+  port: 6379
+  database: 1

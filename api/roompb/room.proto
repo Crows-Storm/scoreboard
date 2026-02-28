@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option go_package = "github.com/Crows-Storm/scoreboard/internal/room/protos";
+
+service RoomService {
+
+  // create a Room
+  rpc CreatedRoom(CreatedRoomRequest) returns (CreatedRoomResponse); // return Result<Room>
+
+  // in to room
+  rpc JoinRoom(JoinRoomRequest) returns (JoinedRoomResponse); // in to a room, return Result<Room>
+}
+
+message CreatedRoomRequest {
+  string name = 2;  // room master the name
+}
+
+message CreatedRoomResponse{
+  string id = 1; // is room id
+  repeated User users = 3; // user array
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string avatar = 3;
+  int32 balance = 4;  // init default 0, this value can < 0
+}
+
+message JoinRoomRequest{
+  string roomId = 1;  // room id
+  string name = 3;  // in to room use the name
+}
+
+message JoinedRoomResponse{
+  string id = 1; // is room id
+  int64 timestamp = 2;
+  repeated User users = 3; // user array
+}
