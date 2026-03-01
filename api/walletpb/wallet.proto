@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+option go_package = "github.com/Crows-Storm/scoreboard/internal/wallet/protos";
+
+service WalletService {
+
+  // get wallet balance
+  rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse);
+
+  // deposit money to wallet
+  rpc Deposit(DepositRequest) returns (DepositResponse);
+
+  // withdraw money from wallet
+  rpc Withdraw(WithdrawRequest) returns (WithdrawResponse);
+
+  // transfer money between wallets
+  rpc Transfer(TransferRequest) returns (TransferResponse);
+
+  // get transaction history
+  rpc GetTransactions(GetTransactionsRequest) returns (GetTransactionsResponse);
+}
+
+message GetBalanceRequest {
+  string user_id = 1;  // user id
+}
+
+message GetBalanceResponse {
+  int32 balance = 1;  // current balance
+  string user_id = 2;  // user id
+}
+
+message DepositRequest {
+  string user_id = 1;  // user id
+  int32 amount = 2;  // deposit amount (must be positive)
+  string description = 3;  // transaction description (optional)
+}
+
+message DepositResponse {
+  Transaction transaction = 1;
+  int32 new_balance = 2;  // balance after deposit
+}
+
+message WithdrawRequest {
+  string user_id = 1;  // user id
+  int32 amount = 2;  // withdraw amount (must be positive)
+  string description = 3;  // transaction description (optional)
+}
+
+message WithdrawResponse {
+  Transaction transaction = 1;
+  int32 new_balance = 2;  // balance after withdrawal
+}
+
+message TransferRequest {
+  string from_user_id = 1;  // sender user id
+  repeated string to_user_ids = 2;  // receiver user ids (can be one or multiple)
+  int32 amount = 3;  // transfer amount per user (must be positive)
+  string description = 4;  // transaction description (optional)
+}
+
+message TransferResponse {
+  repeated Transaction transactions = 1;  // transactions for each receiver
+  int32 from_new_balance = 2;  // sender's new balance
+  repeated TransferResult results = 3;  // transfer results for each receiver
+}
+
+message TransferResult {
+  string to_user_id = 1;  // receiver user id
+  int32 to_new_balance = 2;  // receiver's new balance
+  bool success = 3;  // whether transfer to this user succeeded
+  string error_message = 4;  // error message if failed
+}
+
+message GetTransactionsRequest {
+  string user_id = 1;  // user id
+  int32 limit = 2;  // max number of transactions to return (default 50)
+  int32 offset = 3;  // offset for pagination (default 0)
+}
+
+message GetTransactionsResponse {
+  repeated Transaction transactions = 1;
+  int32 total = 2;  // total number of transactions
+}
+
+message Transaction {
+  string id = 1;  // transaction id
+  string user_id = 2;  // user id
+  TransactionType type = 3;  // transaction type
+  int32 amount = 4;  // transaction amount (positive for credit, negative for debit)
+  int32 balance_before = 5;  // balance before transaction
+  int32 balance_after = 6;  // balance after transaction
+  string description = 7;  // transaction description
+  string related_user_id = 8;  // related user id (for transfers)
+  int64 created_at = 9;  // timestamp
+}
+
+enum TransactionType {
+  UNKNOWN = 0;
+  DEPOSIT = 1;  // deposit
+  WITHDRAW = 2;  // withdraw
+  TRANSFER_IN = 3;  // receive transfer
+  TRANSFER_OUT = 4;  // send transfer
+}

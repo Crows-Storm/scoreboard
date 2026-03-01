@@ -1,0 +1,261 @@
+openapi: 3.0.3
+info:
+  title: User Service API
+  description: API for managing users
+  version: 1.0.0
+servers:
+  - url: http://localhost:8082
+    description: Local development server
+
+paths:
+  /api/v1/users:
+    post:
+      summary: Create a new user
+      description: Creates a new user with the specified name and optional avatar
+      operationId: createUser
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '200':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/users/{userId}:
+    get:
+      summary: Get user by ID
+      description: Retrieve user information by user ID
+      operationId: getUser
+      tags:
+        - User
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Update user
+      description: Update user information
+      operationId: updateUser
+      tags:
+        - User
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUserResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete user
+      description: Delete a user by ID
+      operationId: deleteUser
+      tags:
+        - User
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteUserResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: User name
+          example: "John Doe"
+        avatar:
+          type: string
+          description: User avatar URL (optional)
+          example: "https://example.com/avatar.jpg"
+
+    CreateUserResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+
+    GetUserResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User name (optional)
+          example: "Jane Smith"
+        avatar:
+          type: string
+          description: User avatar URL (optional)
+          example: "https://example.com/new-avatar.jpg"
+        balance:
+          type: integer
+          format: int32
+          description: User balance (optional, can be negative)
+          example: 100
+
+    UpdateUserResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+
+    DeleteUserResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the deletion was successful
+          example: true
+        message:
+          type: string
+          description: Deletion result message
+          example: "User deleted successfully"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: User ID
+          example: "user-123456"
+        name:
+          type: string
+          description: User name
+          example: "John Doe"
+        avatar:
+          type: string
+          description: User avatar URL
+          example: "https://example.com/avatar.jpg"
+        balance:
+          type: integer
+          format: int32
+          description: User balance (can be negative)
+          example: 0
+          default: 0
+        created_at:
+          type: integer
+          format: int64
+          description: Creation timestamp
+          example: 1709164800
+        updated_at:
+          type: integer
+          format: int64
+          description: Last update timestamp
+          example: 1709164800
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: "INVALID_REQUEST"
+        message:
+          type: string
+          description: Error message
+          example: "Invalid user ID"

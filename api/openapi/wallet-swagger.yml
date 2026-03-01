@@ -1,0 +1,434 @@
+openapi: 3.0.3
+info:
+  title: Wallet Service API
+  description: API for managing user wallets and transactions
+  version: 1.0.0
+servers:
+  - url: http://localhost:8083
+    description: Local development server
+
+paths:
+  /api/v1/wallets/{userId}/balance:
+    get:
+      summary: Get wallet balance
+      description: Retrieve the current balance for a user's wallet
+      operationId: getBalance
+      tags:
+        - Wallet
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Balance retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBalanceResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/wallets/{userId}/deposit:
+    post:
+      summary: Deposit money
+      description: Deposit money into a user's wallet
+      operationId: deposit
+      tags:
+        - Wallet
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepositRequest'
+      responses:
+        '200':
+          description: Deposit successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/wallets/{userId}/withdraw:
+    post:
+      summary: Withdraw money
+      description: Withdraw money from a user's wallet
+      operationId: withdraw
+      tags:
+        - Wallet
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WithdrawRequest'
+      responses:
+        '200':
+          description: Withdrawal successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WithdrawResponse'
+        '400':
+          description: Bad request (e.g., insufficient balance)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/wallets/transfer:
+    post:
+      summary: Transfer money
+      description: Transfer money from one user's wallet to another
+      operationId: transfer
+      tags:
+        - Wallet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Transfer successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+        '400':
+          description: Bad request (e.g., insufficient balance)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/wallets/{userId}/transactions:
+    get:
+      summary: Get transaction history
+      description: Retrieve transaction history for a user's wallet
+      operationId: getTransactions
+      tags:
+        - Wallet
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of transactions to return
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          required: false
+          description: Offset for pagination
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTransactionsResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    GetBalanceResponse:
+      type: object
+      properties:
+        balance:
+          type: integer
+          format: int32
+          description: Current wallet balance
+          example: 1000
+        user_id:
+          type: string
+          description: User ID
+          example: "user-123456"
+
+    DepositRequest:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          type: integer
+          format: int32
+          description: Amount to deposit (must be positive)
+          example: 500
+          minimum: 1
+        description:
+          type: string
+          description: Transaction description (optional)
+          example: "Initial deposit"
+
+    DepositResponse:
+      type: object
+      properties:
+        transaction:
+          $ref: '#/components/schemas/Transaction'
+        new_balance:
+          type: integer
+          format: int32
+          description: Balance after deposit
+          example: 1500
+
+    WithdrawRequest:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          type: integer
+          format: int32
+          description: Amount to withdraw (must be positive)
+          example: 200
+          minimum: 1
+        description:
+          type: string
+          description: Transaction description (optional)
+          example: "Cash withdrawal"
+
+    WithdrawResponse:
+      type: object
+      properties:
+        transaction:
+          $ref: '#/components/schemas/Transaction'
+        new_balance:
+          type: integer
+          format: int32
+          description: Balance after withdrawal
+          example: 800
+
+    TransferRequest:
+      type: object
+      required:
+        - from_user_id
+        - to_user_ids
+        - amount
+      properties:
+        from_user_id:
+          type: string
+          description: Sender user ID
+          example: "user-123456"
+        to_user_ids:
+          type: array
+          description: Receiver user IDs (can be one or multiple)
+          items:
+            type: string
+          example: ["user-789012", "user-345678"]
+          minItems: 1
+        amount:
+          type: integer
+          format: int32
+          description: Amount to transfer per user (must be positive)
+          example: 300
+          minimum: 1
+        description:
+          type: string
+          description: Transaction description (optional)
+          example: "Payment for services"
+
+    TransferResponse:
+      type: object
+      properties:
+        transactions:
+          type: array
+          description: Transactions for each receiver
+          items:
+            $ref: '#/components/schemas/Transaction'
+        from_new_balance:
+          type: integer
+          format: int32
+          description: Sender's new balance
+          example: 400
+        results:
+          type: array
+          description: Transfer results for each receiver
+          items:
+            $ref: '#/components/schemas/TransferResult'
+
+    TransferResult:
+      type: object
+      properties:
+        to_user_id:
+          type: string
+          description: Receiver user ID
+          example: "user-789012"
+        to_new_balance:
+          type: integer
+          format: int32
+          description: Receiver's new balance
+          example: 1300
+        success:
+          type: boolean
+          description: Whether transfer to this user succeeded
+          example: true
+        error_message:
+          type: string
+          description: Error message if failed
+          example: ""
+
+    GetTransactionsResponse:
+      type: object
+      properties:
+        transactions:
+          type: array
+          description: List of transactions
+          items:
+            $ref: '#/components/schemas/Transaction'
+        total:
+          type: integer
+          format: int32
+          description: Total number of transactions
+          example: 25
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Transaction ID
+          example: "txn-abc123"
+        user_id:
+          type: string
+          description: User ID
+          example: "user-123456"
+        type:
+          type: string
+          description: Transaction type
+          enum: [UNKNOWN, DEPOSIT, WITHDRAW, TRANSFER_IN, TRANSFER_OUT]
+          example: "DEPOSIT"
+        amount:
+          type: integer
+          format: int32
+          description: Transaction amount (positive for credit, negative for debit)
+          example: 500
+        balance_before:
+          type: integer
+          format: int32
+          description: Balance before transaction
+          example: 1000
+        balance_after:
+          type: integer
+          format: int32
+          description: Balance after transaction
+          example: 1500
+        description:
+          type: string
+          description: Transaction description
+          example: "Initial deposit"
+        related_user_id:
+          type: string
+          description: Related user ID (for transfers)
+          example: "user-789012"
+        created_at:
+          type: integer
+          format: int64
+          description: Transaction timestamp
+          example: 1709164800
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: "INSUFFICIENT_BALANCE"
+        message:
+          type: string
+          description: Error message
+          example: "Insufficient balance for withdrawal"

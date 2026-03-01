@@ -1,14 +1,17 @@
+fallback-grpc-addr: 127.0.0.1:5050
+
 room:
   service-name: room
   servicer-to-run: http
   http-addr: 127.0.0.1:8081
+  grpc-addr: 127.0.0.1:5051
 
 
 users:
   service-name: users
   servicer-to-run: http
   http-addr: 127.0.0.1:8082
-
+  grpc-addr: 127.0.0.1:5052
 
 
 redis:

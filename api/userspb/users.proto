@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+option go_package = "github.com/Crows-Storm/scoreboard/internal/users/protos";
+
+service UserService {
+
+  // create a User
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+
+  // get user by id
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+
+  // update user info
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+
+  // delete user
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+}
+
+message CreateUserRequest {
+  string name = 1;  // user name
+  string avatar = 2;  // user avatar URL (optional)
+}
+
+message CreateUserResponse {
+  User user = 1;
+}
+
+message GetUserRequest {
+  string id = 1;  // user id
+}
+
+message GetUserResponse {
+  User user = 1;
+}
+
+message UpdateUserRequest {
+  string id = 1;  // user id
+  string name = 2;  // user name (optional)
+  string avatar = 3;  // user avatar URL (optional)
+  int32 balance = 4;  // user balance (optional)
+}
+
+message UpdateUserResponse {
+  User user = 1;
+}
+
+message DeleteUserRequest {
+  string id = 1;  // user id
+}
+
+message DeleteUserResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string avatar = 3;
+  int32 balance = 4;  // init default 0, this value can < 0
+  int64 created_at = 5;  // timestamp
+  int64 updated_at = 6;  // timestamp
+}
