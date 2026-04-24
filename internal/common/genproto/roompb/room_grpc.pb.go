@@ -4,7 +4,7 @@
 // - protoc             v6.33.4
 // source: room.proto
 
-package protos
+package roompb
 
 import (
 	context "context"

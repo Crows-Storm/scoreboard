@@ -4,7 +4,7 @@
 // 	protoc        v6.33.4
 // source: room.proto
 
-package protos
+package roompb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -322,7 +322,7 @@ const file_room_proto_rawDesc = "" +
 	"\x05users\x18\x03 \x03(\v2\x05.UserR\x05users2z\n" +
 	"\vRoomService\x128\n" +
 	"\vCreatedRoom\x12\x13.CreatedRoomRequest\x1a\x14.CreatedRoomResponse\x121\n" +
-	"\bJoinRoom\x12\x10.JoinRoomRequest\x1a\x13.JoinedRoomResponseB8Z6github.com/Crows-Storm/scoreboard/internal/room/protosb\x06proto3"
+	"\bJoinRoom\x12\x10.JoinRoomRequest\x1a\x13.JoinedRoomResponseBCZAgithub.com/Crows-Storm/scoreboard/internal/common/genproto/roompbb\x06proto3"
 
 var (
 	file_room_proto_rawDescOnce sync.Once

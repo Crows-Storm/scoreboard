@@ -82,3 +82,4 @@ go.sum.backup
 tmp/
 
 .cache
+.alma-snapshots

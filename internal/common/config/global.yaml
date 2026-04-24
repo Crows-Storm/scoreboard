@@ -5,6 +5,7 @@ room:
   servicer-to-run: http
   http-addr: 127.0.0.1:8081
   grpc-addr: 127.0.0.1:5051
+  server-to-run: http
 
 
 users:
@@ -12,6 +13,7 @@ users:
   servicer-to-run: http
   http-addr: 127.0.0.1:8082
   grpc-addr: 127.0.0.1:5052
+  server-to-run: grpc
 
 
 redis:

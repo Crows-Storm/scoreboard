@@ -4,7 +4,7 @@
 // 	protoc        v6.33.4
 // source: users.proto
 
-package protos
+package userspb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -539,7 +539,7 @@ const file_users_proto_rawDesc = "" +
 	"\n" +
 	"UpdateUser\x12\x12.UpdateUserRequest\x1a\x13.UpdateUserResponse\x125\n" +
 	"\n" +
-	"DeleteUser\x12\x12.DeleteUserRequest\x1a\x13.DeleteUserResponseB9Z7github.com/Crows-Storm/scoreboard/internal/users/protosb\x06proto3"
+	"DeleteUser\x12\x12.DeleteUserRequest\x1a\x13.DeleteUserResponseBDZBgithub.com/Crows-Storm/scoreboard/internal/common/genproto/userspbb\x06proto3"
 
 var (
 	file_users_proto_rawDescOnce sync.Once

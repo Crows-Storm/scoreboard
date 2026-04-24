@@ -4,7 +4,7 @@
 // - protoc             v6.33.4
 // source: wallet.proto
 
-package protos
+package walletpb
 
 import (
 	context "context"

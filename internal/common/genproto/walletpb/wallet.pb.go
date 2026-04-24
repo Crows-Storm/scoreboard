@@ -4,7 +4,7 @@
 // 	protoc        v6.33.4
 // source: wallet.proto
 
-package protos
+package walletpb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -884,7 +884,7 @@ const file_wallet_proto_rawDesc = "" +
 	"\aDeposit\x12\x0f.DepositRequest\x1a\x10.DepositResponse\x12/\n" +
 	"\bWithdraw\x12\x10.WithdrawRequest\x1a\x11.WithdrawResponse\x12/\n" +
 	"\bTransfer\x12\x10.TransferRequest\x1a\x11.TransferResponse\x12D\n" +
-	"\x0fGetTransactions\x12\x17.GetTransactionsRequest\x1a\x18.GetTransactionsResponseB:Z8github.com/Crows-Storm/scoreboard/internal/wallet/protosb\x06proto3"
+	"\x0fGetTransactions\x12\x17.GetTransactionsRequest\x1a\x18.GetTransactionsResponseBEZCgithub.com/Crows-Storm/scoreboard/internal/common/genproto/walletpbb\x06proto3"
 
 var (
 	file_wallet_proto_rawDescOnce sync.Once

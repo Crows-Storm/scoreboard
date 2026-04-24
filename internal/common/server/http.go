@@ -17,9 +17,9 @@ func RunHTTPServerOnAddr(addr string, wrapper func(router *gin.Engine)) {
 
 	apiRouter.Group("/api/v1")
 
-	//apiRouter.GET("/ping", func(c *gin.Context) {
-	//	c.JSON(200, "pone")
-	//})
+	apiRouter.GET("/api/v1/ping", func(c *gin.Context) {
+		c.JSON(200, "pone")
+	})
 
 	if err := apiRouter.Run(addr); err != nil {
 		panic(err)

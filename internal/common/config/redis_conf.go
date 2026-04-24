@@ -12,6 +12,12 @@ import (
 var RedisClient *redis.Client
 var RedisCtx = context.Background()
 
+const (
+	RedisHost     = "redis.host"
+	RedisProt     = "redis.port"
+	RedisDatabase = "redis.database"
+)
+
 type RedisConfig struct {
 	Host     string
 	Port     int
@@ -20,9 +26,9 @@ type RedisConfig struct {
 
 func NewRedisInstance() error {
 	redisConfig := &RedisConfig{
-		Host:     viper.GetString("redis.host"),
-		Port:     viper.GetInt("redis.port"),
-		Database: viper.GetInt("redis.database"),
+		Host:     viper.GetString(RedisHost),
+		Port:     viper.GetInt(RedisProt),
+		Database: viper.GetInt(RedisDatabase),
 	}
 
 	RedisClient = redis.NewClient(&redis.Options{
