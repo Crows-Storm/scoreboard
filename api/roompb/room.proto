@@ -3,37 +3,70 @@ syntax = "proto3";
 option go_package = "github.com/Crows-Storm/scoreboard/internal/common/genproto/roompb";
 
 service RoomService {
+  // query
+  rpc GetRoom(GetRoomRequest) returns (GetRoomResponse);  // get room domain context
+  rpc List(RoomListRequest) returns (RoomListResponse);
 
   // create a Room
   rpc CreatedRoom(CreatedRoomRequest) returns (CreatedRoomResponse); // return Result<Room>
+  rpc UpdateRoom(UpdateRoomRequest) returns(UpdateRoomResponse);
 
-  // in to room
-  rpc JoinRoom(JoinRoomRequest) returns (JoinedRoomResponse); // in to a room, return Result<Room>
+  // this room the order book for user id
+  rpc OrderBook(OrderBookListRequest) returns (OrderBookListRequest);
+  rpc Profit(ProfitRequest) returns (ProfitResponse);
+}
+
+message GetRoomRequest {
+  string roomId = 1;
+}
+
+message GetRoomResponse {
+  string roomId = 1;
+  repeated string userIds = 2;
+}
+
+message RoomListRequest {
+  string cursor = 1;  // page cursor code
+  int32 size = 2;
+}
+
+message RoomListResponse {
+  repeated GetRoomResponse data = 1;
 }
 
 message CreatedRoomRequest {
-  string name = 2;  // room master the name
+//  string name = 2;  // room master the name
+  string userId = 1; // user the machine code
 }
 
 message CreatedRoomResponse{
   string id = 1; // is room id
-  repeated User users = 3; // user array
 }
 
-message User {
+// nothing
+message UpdateRoomRequest {
   string id = 1;
-  string name = 2;
-  string avatar = 3;
-  int32 balance = 4;  // init default 0, this value can < 0
 }
 
-message JoinRoomRequest{
-  string roomId = 1;  // room id
-  string name = 3;  // in to room use the name
+// nothing
+message UpdateRoomResponse{
+  string id = 1;
 }
 
-message JoinedRoomResponse{
-  string id = 1; // is room id
-  int64 timestamp = 2;
-  repeated User users = 3; // user array
+message OrderBookListRequest {
+  string roomId = 1;
+}
+
+message OrderBookListResponse {
+    string userId = 1;
+    int32 volume = 2;
+}
+
+message ProfitRequest {
+  string userId = 1;
+}
+
+message ProfitResponse {
+  string userId = 1;
+  double profit = 2;
 }

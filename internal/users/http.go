@@ -10,12 +10,12 @@ type HTTPServer struct {
 	app app.Application
 }
 
-func (H HTTPServer) CreateUser(c *gin.Context) {
+func (H HTTPServer) LoginUser(c *gin.Context) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (H HTTPServer) DeleteUser(c *gin.Context, userId string) {
+func (H HTTPServer) RegisterUser(c *gin.Context) {
 	//TODO implement me
 	panic("implement me")
 }

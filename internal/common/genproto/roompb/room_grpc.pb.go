@@ -19,18 +19,27 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	RoomService_GetRoom_FullMethodName     = "/RoomService/GetRoom"
+	RoomService_List_FullMethodName        = "/RoomService/List"
 	RoomService_CreatedRoom_FullMethodName = "/RoomService/CreatedRoom"
-	RoomService_JoinRoom_FullMethodName    = "/RoomService/JoinRoom"
+	RoomService_UpdateRoom_FullMethodName  = "/RoomService/UpdateRoom"
+	RoomService_OrderBook_FullMethodName   = "/RoomService/OrderBook"
+	RoomService_Profit_FullMethodName      = "/RoomService/Profit"
 )
 
 // RoomServiceClient is the client API for RoomService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RoomServiceClient interface {
+	// query
+	GetRoom(ctx context.Context, in *GetRoomRequest, opts ...grpc.CallOption) (*GetRoomResponse, error)
+	List(ctx context.Context, in *RoomListRequest, opts ...grpc.CallOption) (*RoomListResponse, error)
 	// create a Room
 	CreatedRoom(ctx context.Context, in *CreatedRoomRequest, opts ...grpc.CallOption) (*CreatedRoomResponse, error)
-	// in to room
-	JoinRoom(ctx context.Context, in *JoinRoomRequest, opts ...grpc.CallOption) (*JoinedRoomResponse, error)
+	UpdateRoom(ctx context.Context, in *UpdateRoomRequest, opts ...grpc.CallOption) (*UpdateRoomResponse, error)
+	// this room the order book for user id
+	OrderBook(ctx context.Context, in *OrderBookListRequest, opts ...grpc.CallOption) (*OrderBookListRequest, error)
+	Profit(ctx context.Context, in *ProfitRequest, opts ...grpc.CallOption) (*ProfitResponse, error)
 }
 
 type roomServiceClient struct {
@@ -39,6 +48,26 @@ type roomServiceClient struct {
 
 func NewRoomServiceClient(cc grpc.ClientConnInterface) RoomServiceClient {
 	return &roomServiceClient{cc}
+}
+
+func (c *roomServiceClient) GetRoom(ctx context.Context, in *GetRoomRequest, opts ...grpc.CallOption) (*GetRoomResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetRoomResponse)
+	err := c.cc.Invoke(ctx, RoomService_GetRoom_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *roomServiceClient) List(ctx context.Context, in *RoomListRequest, opts ...grpc.CallOption) (*RoomListResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RoomListResponse)
+	err := c.cc.Invoke(ctx, RoomService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *roomServiceClient) CreatedRoom(ctx context.Context, in *CreatedRoomRequest, opts ...grpc.CallOption) (*CreatedRoomResponse, error) {
@@ -51,10 +80,30 @@ func (c *roomServiceClient) CreatedRoom(ctx context.Context, in *CreatedRoomRequ
 	return out, nil
 }
 
-func (c *roomServiceClient) JoinRoom(ctx context.Context, in *JoinRoomRequest, opts ...grpc.CallOption) (*JoinedRoomResponse, error) {
+func (c *roomServiceClient) UpdateRoom(ctx context.Context, in *UpdateRoomRequest, opts ...grpc.CallOption) (*UpdateRoomResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(JoinedRoomResponse)
-	err := c.cc.Invoke(ctx, RoomService_JoinRoom_FullMethodName, in, out, cOpts...)
+	out := new(UpdateRoomResponse)
+	err := c.cc.Invoke(ctx, RoomService_UpdateRoom_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *roomServiceClient) OrderBook(ctx context.Context, in *OrderBookListRequest, opts ...grpc.CallOption) (*OrderBookListRequest, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(OrderBookListRequest)
+	err := c.cc.Invoke(ctx, RoomService_OrderBook_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *roomServiceClient) Profit(ctx context.Context, in *ProfitRequest, opts ...grpc.CallOption) (*ProfitResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ProfitResponse)
+	err := c.cc.Invoke(ctx, RoomService_Profit_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,10 +114,15 @@ func (c *roomServiceClient) JoinRoom(ctx context.Context, in *JoinRoomRequest, o
 // All implementations must embed UnimplementedRoomServiceServer
 // for forward compatibility.
 type RoomServiceServer interface {
+	// query
+	GetRoom(context.Context, *GetRoomRequest) (*GetRoomResponse, error)
+	List(context.Context, *RoomListRequest) (*RoomListResponse, error)
 	// create a Room
 	CreatedRoom(context.Context, *CreatedRoomRequest) (*CreatedRoomResponse, error)
-	// in to room
-	JoinRoom(context.Context, *JoinRoomRequest) (*JoinedRoomResponse, error)
+	UpdateRoom(context.Context, *UpdateRoomRequest) (*UpdateRoomResponse, error)
+	// this room the order book for user id
+	OrderBook(context.Context, *OrderBookListRequest) (*OrderBookListRequest, error)
+	Profit(context.Context, *ProfitRequest) (*ProfitResponse, error)
 	mustEmbedUnimplementedRoomServiceServer()
 }
 
@@ -79,11 +133,23 @@ type RoomServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedRoomServiceServer struct{}
 
+func (UnimplementedRoomServiceServer) GetRoom(context.Context, *GetRoomRequest) (*GetRoomResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetRoom not implemented")
+}
+func (UnimplementedRoomServiceServer) List(context.Context, *RoomListRequest) (*RoomListResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
 func (UnimplementedRoomServiceServer) CreatedRoom(context.Context, *CreatedRoomRequest) (*CreatedRoomResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreatedRoom not implemented")
 }
-func (UnimplementedRoomServiceServer) JoinRoom(context.Context, *JoinRoomRequest) (*JoinedRoomResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method JoinRoom not implemented")
+func (UnimplementedRoomServiceServer) UpdateRoom(context.Context, *UpdateRoomRequest) (*UpdateRoomResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateRoom not implemented")
+}
+func (UnimplementedRoomServiceServer) OrderBook(context.Context, *OrderBookListRequest) (*OrderBookListRequest, error) {
+	return nil, status.Error(codes.Unimplemented, "method OrderBook not implemented")
+}
+func (UnimplementedRoomServiceServer) Profit(context.Context, *ProfitRequest) (*ProfitResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Profit not implemented")
 }
 func (UnimplementedRoomServiceServer) mustEmbedUnimplementedRoomServiceServer() {}
 func (UnimplementedRoomServiceServer) testEmbeddedByValue()                     {}
@@ -106,6 +172,42 @@ func RegisterRoomServiceServer(s grpc.ServiceRegistrar, srv RoomServiceServer) {
 	s.RegisterService(&RoomService_ServiceDesc, srv)
 }
 
+func _RoomService_GetRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoomRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServiceServer).GetRoom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RoomService_GetRoom_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServiceServer).GetRoom(ctx, req.(*GetRoomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RoomService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RoomListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RoomService_List_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServiceServer).List(ctx, req.(*RoomListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _RoomService_CreatedRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreatedRoomRequest)
 	if err := dec(in); err != nil {
@@ -124,20 +226,56 @@ func _RoomService_CreatedRoom_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RoomService_JoinRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(JoinRoomRequest)
+func _RoomService_UpdateRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRoomRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RoomServiceServer).JoinRoom(ctx, in)
+		return srv.(RoomServiceServer).UpdateRoom(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: RoomService_JoinRoom_FullMethodName,
+		FullMethod: RoomService_UpdateRoom_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoomServiceServer).JoinRoom(ctx, req.(*JoinRoomRequest))
+		return srv.(RoomServiceServer).UpdateRoom(ctx, req.(*UpdateRoomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RoomService_OrderBook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OrderBookListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServiceServer).OrderBook(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RoomService_OrderBook_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServiceServer).OrderBook(ctx, req.(*OrderBookListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RoomService_Profit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProfitRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServiceServer).Profit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RoomService_Profit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServiceServer).Profit(ctx, req.(*ProfitRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -150,12 +288,28 @@ var RoomService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*RoomServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "GetRoom",
+			Handler:    _RoomService_GetRoom_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _RoomService_List_Handler,
+		},
+		{
 			MethodName: "CreatedRoom",
 			Handler:    _RoomService_CreatedRoom_Handler,
 		},
 		{
-			MethodName: "JoinRoom",
-			Handler:    _RoomService_JoinRoom_Handler,
+			MethodName: "UpdateRoom",
+			Handler:    _RoomService_UpdateRoom_Handler,
+		},
+		{
+			MethodName: "OrderBook",
+			Handler:    _RoomService_OrderBook_Handler,
+		},
+		{
+			MethodName: "Profit",
+			Handler:    _RoomService_Profit_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

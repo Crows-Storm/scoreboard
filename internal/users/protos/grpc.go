@@ -16,22 +16,7 @@ func NewGRPCServer(app app.Application) *GRPCServer {
 	return &GRPCServer{app: app}
 }
 
-func (G GRPCServer) CreateUser(ctx context.Context, request *userspb.CreateUserRequest) (*userspb.CreateUserResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
 func (G GRPCServer) GetUser(ctx context.Context, request *userspb.GetUserRequest) (*userspb.GetUserResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (G GRPCServer) UpdateUser(ctx context.Context, request *userspb.UpdateUserRequest) (*userspb.UpdateUserResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (G GRPCServer) DeleteUser(ctx context.Context, request *userspb.DeleteUserRequest) (*userspb.DeleteUserResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }

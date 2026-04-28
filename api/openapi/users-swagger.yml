@@ -1,18 +1,18 @@
 openapi: 3.0.3
 info:
   title: User Service API
-  description: API for managing users
+  description: API for user registration, authentication and management
   version: 1.0.0
 servers:
   - url: http://localhost:8082
     description: Local development server
 
 paths:
-  /api/v1/users:
+  /api/v1/users/register:
     post:
-      summary: Create a new user
-      description: Creates a new user with the specified name and optional avatar
-      operationId: createUser
+      summary: Register a new user
+      description: Register a new user with email and password
+      operationId: registerUser
       tags:
         - User
       requestBody:
@@ -20,16 +20,61 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              $ref: '#/components/schemas/RegisterRequest'
       responses:
-        '200':
-          description: User created successfully
+        '201':
+          description: User registered successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateUserResponse'
+                $ref: '#/components/schemas/RegisterResponse'
         '400':
-          description: Bad request
+          description: Bad request (invalid email format, weak password, etc.)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict (email already exists)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/users/login:
+    post:
+      summary: User login
+      description: Authenticate user with email and password
+      operationId: loginUser
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Bad request (missing email or password)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized (invalid credentials)
           content:
             application/json:
               schema:
@@ -120,46 +165,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-    delete:
-      summary: Delete user
-      description: Delete a user by ID
-      operationId: deleteUser
-      tags:
-        - User
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          description: The ID of the user to delete
-          schema:
-            type: string
-      responses:
-        '200':
-          description: User deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeleteUserResponse'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
 components:
   schemas:
-    CreateUserRequest:
+    RegisterRequest:
       type: object
       required:
+        - email
+        - password
         - name
       properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+          example: "user@example.com"
+        password:
+          type: string
+          format: password
+          minLength: 6
+          description: User password (minimum 6 characters)
+          example: "password123"
         name:
           type: string
           description: User name
@@ -169,11 +194,42 @@ components:
           description: User avatar URL (optional)
           example: "https://example.com/avatar.jpg"
 
-    CreateUserResponse:
+    RegisterResponse:
       type: object
       properties:
         user:
           $ref: '#/components/schemas/User'
+        token:
+          type: string
+          description: JWT authentication token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+          example: "user@example.com"
+        password:
+          type: string
+          format: password
+          description: User password
+          example: "password123"
+
+    LoginResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        token:
+          type: string
+          description: JWT authentication token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
     GetUserResponse:
       type: object
@@ -192,29 +248,18 @@ components:
           type: string
           description: User avatar URL (optional)
           example: "https://example.com/new-avatar.jpg"
-        balance:
-          type: integer
-          format: int32
-          description: User balance (optional, can be negative)
-          example: 100
+        password:
+          type: string
+          format: password
+          minLength: 6
+          description: New password (optional, minimum 6 characters)
+          example: "newpassword123"
 
     UpdateUserResponse:
       type: object
       properties:
         user:
           $ref: '#/components/schemas/User'
-
-    DeleteUserResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Whether the deletion was successful
-          example: true
-        message:
-          type: string
-          description: Deletion result message
-          example: "User deleted successfully"
 
     User:
       type: object
@@ -223,6 +268,11 @@ components:
           type: string
           description: User ID
           example: "user-123456"
+        email:
+          type: string
+          format: email
+          description: User email address
+          example: "user@example.com"
         name:
           type: string
           description: User name
@@ -231,12 +281,6 @@ components:
           type: string
           description: User avatar URL
           example: "https://example.com/avatar.jpg"
-        balance:
-          type: integer
-          format: int32
-          description: User balance (can be negative)
-          example: 0
-          default: 0
         created_at:
           type: integer
           format: int64
@@ -258,4 +302,4 @@ components:
         message:
           type: string
           description: Error message
-          example: "Invalid user ID"
+          example: "Invalid email format"
