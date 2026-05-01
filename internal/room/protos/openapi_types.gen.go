@@ -14,8 +14,8 @@ type CreatedRoomResponse struct {
 	// Id Room ID
 	Id *string `json:"id,omitempty"`
 
-	// Users Array of users in the room
-	Users *[]User `json:"users,omitempty"`
+	// User Array of user in the room
+	User *[]User `json:"user,omitempty"`
 }
 
 // Error defines model for Error.
@@ -41,8 +41,8 @@ type JoinedRoomResponse struct {
 	// Timestamp Timestamp of when the user joined
 	Timestamp *int64 `json:"timestamp,omitempty"`
 
-	// Users Array of users in the room
-	Users *[]User `json:"users,omitempty"`
+	// User Array of user in the room
+	User *[]User `json:"user,omitempty"`
 }
 
 // User defines model for User.

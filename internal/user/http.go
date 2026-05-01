@@ -1,0 +1,31 @@
+package main
+
+import (
+	"github.com/Crows-Storm/scoreboard/internal/user/app"
+	"github.com/gin-gonic/gin"
+)
+
+// HTTPServer to implement HTTPServer interface
+type HTTPServer struct {
+	app app.Application
+}
+
+func (H HTTPServer) LoginUser(c *gin.Context) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (H HTTPServer) RegisterUser(c *gin.Context) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (H HTTPServer) GetUser(c *gin.Context, userId string) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (H HTTPServer) UpdateUser(c *gin.Context, userId string) {
+	//TODO implement me
+	panic("implement me")
+}

@@ -109,7 +109,7 @@ Content-Type: application/json
 ```json
 {
   "id": "room-123456",
-  "users": [
+  "user": [
     {
       "id": "user-789",
       "name": "张三",
@@ -137,7 +137,7 @@ Content-Type: application/json
 {
   "id": "room-123456",
   "timestamp": 1709164800,
-  "users": [
+  "user": [
     {
       "id": "user-789",
       "name": "张三",
@@ -181,7 +181,7 @@ Content-Type: application/json
 │   │   ├── genproto/      # 生成的 protobuf 代码
 │   │   └── server/        # HTTP 服务器工具
 │   ├── room/              # 房间服务实现
-│   └── users/             # 用户服务（未来）
+│   └── user/             # 用户服务（未来）
 ├── pkg/                   # 公共包
 │   └── client/            # 公共 API 客户端
 ├── scripts/               # 构建和生成脚本

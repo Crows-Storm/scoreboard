@@ -106,9 +106,9 @@ components:
           type: string
           description: Room ID
           example: "room-123456"
-        users:
+        user:
           type: array
-          description: Array of users in the room
+          description: Array of user in the room
           items:
             $ref: '#/components/schemas/User'
 
@@ -134,9 +134,9 @@ components:
           format: int64
           description: Timestamp of when the user joined
           example: 1709164800
-        users:
+        user:
           type: array
-          description: Array of users in the room
+          description: Array of user in the room
           items:
             $ref: '#/components/schemas/User'
 

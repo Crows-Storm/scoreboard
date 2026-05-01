@@ -6,17 +6,34 @@ room:
   http-addr: 127.0.0.1:8081
   grpc-addr: 127.0.0.1:5051
   server-to-run: http
+  # mongo database config
+  mongo:
+    database: board_user
 
 
-users:
-  service-name: users
+user:
+  service-name: user
   servicer-to-run: http
   http-addr: 127.0.0.1:8082
   grpc-addr: 127.0.0.1:5052
   server-to-run: grpc
+  # mongo database config
+  mongo:
+    database: board_user
 
 
 redis:
   host: localhost
   port: 6379
   database: 1
+
+# mongo basic config for read
+basic-mongo:
+  read:
+    host: 127.0.0.1
+    port: 27017
+    password: xxxxsadasda
+  waite:
+    host: 127.0.0.1
+    port: 27017
+    password: xxxxsadasda

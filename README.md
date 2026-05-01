@@ -110,7 +110,7 @@ Response:
 ```json
 {
   "id": "room-123456",
-  "users": [
+  "user": [
     {
       "id": "user-789",
       "name": "John Doe",
@@ -138,7 +138,7 @@ Response:
 {
   "id": "room-123456",
   "timestamp": 1709164800,
-  "users": [
+  "user": [
     {
       "id": "user-789",
       "name": "John Doe",
@@ -182,7 +182,7 @@ Perfect for:
 │   │   ├── genproto/      # Generated protobuf code
 │   │   └── server/        # HTTP server utilities
 │   ├── room/              # Room service implementation
-│   └── users/             # User service (future)
+│   └── user/             # User service (future)
 ├── pkg/                   # Public packages
 │   └── client/            # Public API clients
 ├── scripts/               # Build and generation scripts
