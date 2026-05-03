@@ -6,14 +6,14 @@ import (
 )
 
 type Repository interface {
-	Create(context.Context, *Users) (*Users, error)
+	Create(context.Context, *User) (*User, error)
 	Update(
 		ctx context.Context,
-		u *Users,
-		updateFun func(context.Context, *Users) (*Users, error),
+		u *User,
+		updateFun func(context.Context, *User) (*User, error),
 	) error
 
-	Get(id string) (*Users, error)
+	Get(ctx context.Context, id string) (*User, error)
 }
 
 type NotFoundError struct {

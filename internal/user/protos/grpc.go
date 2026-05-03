@@ -17,10 +17,5 @@ func NewGRPCServer(app app.Application) *GRPCServer {
 }
 
 func (G GRPCServer) GetUser(ctx context.Context, request *userpb.GetUserRequest) (*userpb.GetUserResponse, error) {
-	v, err := G.app.Queries.GetUser(ctx, request.Id)
-	if err != nil {
-		return nil, err
-	}
-	v = v
 	return nil, nil
 }

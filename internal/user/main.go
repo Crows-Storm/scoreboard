@@ -26,7 +26,7 @@ func init() {
 }
 
 func main() {
-	serviceName := viper.GetString("user.service-name")
+	serviceName := viper.GetString("users.service-name")
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -42,7 +42,7 @@ func main() {
 		protos.RegisterHandlersWithOptions(router, HTTPServer{
 			app: application, // inject application
 		}, protos.GinServerOptions{
-			BaseURL:      "/api/v1",
+			BaseURL:      "",
 			Middlewares:  nil,
 			ErrorHandler: nil,
 		})

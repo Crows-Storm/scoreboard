@@ -16,9 +16,19 @@ type MemoryUserRepository struct {
 }
 
 func NewMemoryUserRepository() *MemoryUserRepository {
+	s := make([]*domain.User, 0)
+	s = append(s, &domain.User{
+		Id:        "apple",
+		Email:     "sanderQiu@good.com",
+		Name:      "Sander",
+		Avatar:    "https://baidu.com/img.jpg",
+		CreatedAt: time.Now().UnixMilli() - 3600_000,
+		UpdatedAt: time.Now().UnixMilli(),
+	})
 	return &MemoryUserRepository{
-		lock:  &sync.RWMutex{},
-		store: make([]*domain.User, 0),
+		lock: &sync.RWMutex{},
+		//store: make([]*domain.User, 0),
+		store: s,
 	}
 }
 
@@ -27,7 +37,7 @@ func (m MemoryUserRepository) Create(_ context.Context, user *domain.User) (*dom
 	defer m.lock.Unlock()
 
 	nowTimestamp := time.Now().UnixMilli()
-	newUsers := &domain.Users{
+	newUsers := &domain.User{
 		Id:        uuid.NewString(),
 		Email:     user.Email,
 		Name:      user.Name,
@@ -76,7 +86,7 @@ func (m MemoryUserRepository) Update(ctx context.Context, user *domain.User, upd
 	return nil
 }
 
-func (m MemoryUserRepository) Get(id string) (*domain.User, error) {
+func (m MemoryUserRepository) Get(ctx context.Context, id string) (*domain.User, error) {
 	// xx.getById(id)
 	m.lock.RLock()
 	defer m.lock.RUnlock()

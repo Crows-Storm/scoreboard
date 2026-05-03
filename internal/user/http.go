@@ -1,7 +1,10 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/Crows-Storm/scoreboard/internal/user/app"
+	"github.com/Crows-Storm/scoreboard/internal/user/app/query"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,8 +24,14 @@ func (H HTTPServer) RegisterUser(c *gin.Context) {
 }
 
 func (H HTTPServer) GetUser(c *gin.Context, userId string) {
-	//TODO implement me
-	panic("implement me")
+	v, err := H.app.Queries.GetUser.Handle(c, query.GetUser{
+		//Id: userId,
+		Id: "apple",
+	})
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"message": "Failed!!", "error": err})
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Successfully!!", "data": v})
 }
 
 func (H HTTPServer) UpdateUser(c *gin.Context, userId string) {
