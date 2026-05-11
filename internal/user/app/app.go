@@ -1,6 +1,9 @@
 package app
 
-import "github.com/Crows-Storm/scoreboard/internal/user/app/query"
+import (
+	"github.com/Crows-Storm/scoreboard/internal/user/app/command"
+	"github.com/Crows-Storm/scoreboard/internal/user/app/query"
+)
 
 // Application is a simple the CQRS
 type Application struct {
@@ -9,6 +12,8 @@ type Application struct {
 }
 
 type Commands struct {
+	RegisterUser command.RegisterUserHandler
+	UpdateUser   command.UpdateUserHandler
 }
 
 type Queries struct {

@@ -41,6 +41,7 @@ func (m MemoryUserRepository) Create(_ context.Context, user *domain.User) (*dom
 		Id:        uuid.NewString(),
 		Email:     user.Email,
 		Name:      user.Name,
+		Password:  user.Password,
 		Avatar:    user.Avatar,
 		CreatedAt: nowTimestamp,
 		UpdatedAt: nowTimestamp,
@@ -60,15 +61,6 @@ func (m MemoryUserRepository) Update(ctx context.Context, user *domain.User, upd
 
 	for i, v := range m.store {
 		if v.Id == user.Id {
-			//nowTimestamp := time.Now().UnixMilli()
-			//updateUsers := &domain.Users{
-			//	Id:        user.Id,
-			//	Email:     user.Email,
-			//	Name:      user.Name,
-			//	Avatar:    user.Avatar,
-			//	CreatedAt: user.CreatedAt,
-			//	UpdatedAt: nowTimestamp,
-			//}
 			updateUsers, err := updateFun(ctx, user)
 			if err != nil {
 				return err

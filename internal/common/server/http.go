@@ -13,13 +13,14 @@ func RunHTTPServer(serviceName string, wrapper func(router *gin.Engine)) {
 
 func RunHTTPServerOnAddr(addr string, wrapper func(router *gin.Engine)) {
 	apiRouter := gin.New()
-	wrapper(apiRouter)
 
 	apiRouter.Group("/api/v1")
 
 	apiRouter.GET("/api/v1/ping", func(c *gin.Context) {
 		c.JSON(200, "pone")
 	})
+
+	wrapper(apiRouter)
 
 	if err := apiRouter.Run(addr); err != nil {
 		panic(err)

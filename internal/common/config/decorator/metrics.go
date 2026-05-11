@@ -32,3 +32,25 @@ func (q queryMetricsDecorator[C, R]) Handle(ctx context.Context, cmd C) (result 
 	}()
 	return q.base.Handle(ctx, cmd)
 }
+
+type mutationsMetricsDecorator[C, R any] struct {
+	base   CommandHandler[C, R]
+	client MetricsClient
+}
+
+func (q mutationsMetricsDecorator[C, R]) Handle(ctx context.Context, cmd C) (result R, err error) {
+	startTime := time.Now()
+	actionName := strings.ToLower(generateActionName(cmd))
+
+	defer func() {
+		endTime := time.Since(startTime)
+		q.client.Inc(fmt.Sprintf("Mutations command %s.duration", actionName), int(endTime.Seconds()))
+
+		if err == nil {
+			q.client.Inc(fmt.Sprintf("Mutations command %s.success", actionName), 1)
+		} else {
+			q.client.Inc(fmt.Sprintf("Mutations command %s.failure", actionName), 1)
+		}
+	}()
+	return q.base.Handle(ctx, cmd)
+}
