@@ -127,24 +127,15 @@ func TestNewApplicationDependencies(t *testing.T) {
 	// 通过比较 handler 内部引用来验证（需要反射或导出字段）
 }
 
-// 使用 testify/assert 更简洁的版本（推荐）
 func TestNewApplicationWithAssert(t *testing.T) {
-
 	ctx := context.Background()
 	application := NewApplication(ctx)
 
-	// 断言所有 handler 都已初始化
 	assert.NotNil(t, application.Commands.RegisterUser, "RegisterUser handler should be initialized")
 	assert.NotNil(t, application.Commands.UpdateUser, "UpdateUser handler should be initialized")
 	assert.NotNil(t, application.Queries.GetUser, "GetUser query handler should be initialized")
-
-	// 断言具体的类型（如果 handler 类型是导出的）
-	//assert.IsType(t, &command.RegisterUserHandler(), application.Commands.RegisterUser)
-	//assert.IsType(t, &command.UpdateUserHandler{}, application.Commands.UpdateUser)
-	//assert.IsType(t, &query.GetUserHandler{}, application.Queries.GetUser)
 }
 
-// 基准测试：性能测试
 func BenchmarkNewApplication(b *testing.B) {
 	ctx := context.Background()
 

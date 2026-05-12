@@ -56,9 +56,10 @@ func (H HTTPServer) UpdateUser(c *gin.Context, userId string) {
 		return
 	}
 	updateCmd := command.UpdateUserCommand{
+		// from request body
 		User: &body,
+		// UpdateFun the domain.User from store, body from request body
 		UpdateFun: func(ctx context.Context, u *domain.User) (*domain.User, error) {
-			u.Id = userId
 			u.UpdatedAt = time.Now().UnixMilli()
 			if &body != nil {
 				if body.Name != "" {

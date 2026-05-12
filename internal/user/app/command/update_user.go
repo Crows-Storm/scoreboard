@@ -11,6 +11,7 @@ import (
 type Void struct{}
 
 type UpdateUserCommand struct {
+	// TODO: User Semantic confusion?
 	User      *domain.User
 	UpdateFun func(context.Context, *domain.User) (*domain.User, error)
 }
@@ -40,6 +41,12 @@ func NewUpdateUserHandler(
 }
 
 func (u updateUserHandler) Handle(ctx context.Context, cmd UpdateUserCommand) (Void, error) {
+	if cmd.UpdateFun == nil {
+		logrus.Warnf("updateUserHandler got nil UpdateFun, UserId = %#v", cmd.User.Id)
+		cmd.UpdateFun = func(_ context.Context, user *domain.User) (*domain.User, error) {
+			return user, nil
+		}
+	}
 	if err := u.userRepo.Update(ctx, cmd.User, cmd.UpdateFun); err != nil {
 		return Void{}, err
 	}

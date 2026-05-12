@@ -61,7 +61,8 @@ func (m MemoryUserRepository) Update(ctx context.Context, user *domain.User, upd
 
 	for i, v := range m.store {
 		if v.Id == user.Id {
-			updateUsers, err := updateFun(ctx, user)
+			// give updateFun domain.User from store, Updates will be performed by updateFun
+			updateUsers, err := updateFun(ctx, v)
 			if err != nil {
 				return err
 			}
