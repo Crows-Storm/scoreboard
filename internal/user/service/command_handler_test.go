@@ -9,6 +9,7 @@ import (
 	"github.com/Crows-Storm/scoreboard/internal/user/app/command"
 	"github.com/Crows-Storm/scoreboard/internal/user/app/query"
 	domain "github.com/Crows-Storm/scoreboard/internal/user/domain/user"
+	"github.com/bytedance/gopkg/util/logger"
 )
 
 func TestApplicationAllCommandSuccessfully(t *testing.T) {
@@ -74,14 +75,43 @@ func TestApplicationAllCommandSuccessfully(t *testing.T) {
 				}
 				return nil
 			},
+		}, {
+			name: "Testing GetUser By Username",
+			job: func(t *testing.T, app app.Application) error {
+				if v, err := app.Queries.GetUser.Handle(ctx, query.GetUser{
+					Id:       "",
+					Username: "apple",
+				}); err == nil {
+					logger.Debugf("Query result user: %#v", v)
+				} else {
+					t.Fatal("Get User by username is fail.")
+				}
+				return nil
+			},
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := tt.job(t, application); err != nil {
-				t.Fail()
-			}
-		})
-	}
+	//for _, tt := range tests {
+	//	logger.Debugf("Runing %#v Now", tt.name)
+	//	t.Run(tt.name, func(t *testing.T) {
+	//		if err := tt.job(t, application); err != nil {
+	//			t.Fail()
+	//		}
+	//	})
+	//}
+
+	create := tests[0]
+	t.Run(create.name, func(t *testing.T) {
+		if err := create.job(t, application); err != nil {
+			t.Fail()
+		}
+	})
+
+	update := tests[1]
+	t.Run(update.name, func(t *testing.T) {
+		if err := update.job(t, application); err != nil {
+			t.Fail()
+		}
+	})
+
 }

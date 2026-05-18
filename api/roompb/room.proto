@@ -14,6 +14,8 @@ service RoomService {
   // this room the order book for user id
   rpc OrderBook(OrderBookListRequest) returns (OrderBookListRequest);
   rpc Profit(ProfitRequest) returns (ProfitResponse);
+
+  rpc InTheRoom(InTheRoomRequest) returns (InTheRoomResponse);
 }
 
 message GetRoomRequest {
@@ -35,7 +37,7 @@ message RoomListResponse {
 }
 
 message CreatedRoomRequest {
-//  string name = 2;  // room master the name
+  //  string name = 2;  // room master the name
   string userId = 1; // user the machine code
 }
 
@@ -58,8 +60,8 @@ message OrderBookListRequest {
 }
 
 message OrderBookListResponse {
-    string userId = 1;
-    int32 volume = 2;
+  string userId = 1;
+  int32 volume = 2;
 }
 
 message ProfitRequest {
@@ -69,4 +71,12 @@ message ProfitRequest {
 message ProfitResponse {
   string userId = 1;
   double profit = 2;
+}
+
+message InTheRoomRequest{
+  string userId = 1;
+}
+
+message InTheRoomResponse {
+  bool inTheRoom = 1;
 }

@@ -86,11 +86,27 @@ func (m MemoryUserRepository) Get(ctx context.Context, id string) (*domain.User,
 
 	for _, v := range m.store {
 		if v.Id == id {
+			// reset password
+			v.Password = ""
 			logrus.Debugf("memory_user_repo_get||id=%s||res=%+v", id, *v)
 			return v, nil
 		}
 	}
 	return nil, domain.NotFoundError{
 		UserId: id,
+	}
+}
+
+func (m MemoryUserRepository) GetByUsername(ctx context.Context, username string) (*domain.User, error) {
+	m.lock.RLock()
+	defer m.lock.RUnlock()
+	for _, v := range m.store {
+		if v.Name == username {
+			logrus.Debugf("memory_user_repo_get||username=%s||res=%+v", username, *v)
+			return v, nil
+		}
+	}
+	return nil, domain.NotFoundError{
+		UserId: "getUser by username: " + username,
 	}
 }

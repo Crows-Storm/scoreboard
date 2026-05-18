@@ -584,6 +584,94 @@ func (x *ProfitResponse) GetProfit() float64 {
 	return 0
 }
 
+type InTheRoomRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InTheRoomRequest) Reset() {
+	*x = InTheRoomRequest{}
+	mi := &file_room_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InTheRoomRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InTheRoomRequest) ProtoMessage() {}
+
+func (x *InTheRoomRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_room_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InTheRoomRequest.ProtoReflect.Descriptor instead.
+func (*InTheRoomRequest) Descriptor() ([]byte, []int) {
+	return file_room_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *InTheRoomRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type InTheRoomResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	InTheRoom     bool                   `protobuf:"varint,1,opt,name=inTheRoom,proto3" json:"inTheRoom,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InTheRoomResponse) Reset() {
+	*x = InTheRoomResponse{}
+	mi := &file_room_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InTheRoomResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InTheRoomResponse) ProtoMessage() {}
+
+func (x *InTheRoomResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_room_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InTheRoomResponse.ProtoReflect.Descriptor instead.
+func (*InTheRoomResponse) Descriptor() ([]byte, []int) {
+	return file_room_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *InTheRoomResponse) GetInTheRoom() bool {
+	if x != nil {
+		return x.InTheRoom
+	}
+	return false
+}
+
 var File_room_proto protoreflect.FileDescriptor
 
 const file_room_proto_rawDesc = "" +
@@ -617,7 +705,11 @@ const file_room_proto_rawDesc = "" +
 	"\x06userId\x18\x01 \x01(\tR\x06userId\"@\n" +
 	"\x0eProfitResponse\x12\x16\n" +
 	"\x06userId\x18\x01 \x01(\tR\x06userId\x12\x16\n" +
-	"\x06profit\x18\x02 \x01(\x01R\x06profit2\xbf\x02\n" +
+	"\x06profit\x18\x02 \x01(\x01R\x06profit\"*\n" +
+	"\x10InTheRoomRequest\x12\x16\n" +
+	"\x06userId\x18\x01 \x01(\tR\x06userId\"1\n" +
+	"\x11InTheRoomResponse\x12\x1c\n" +
+	"\tinTheRoom\x18\x01 \x01(\bR\tinTheRoom2\xf3\x02\n" +
 	"\vRoomService\x12,\n" +
 	"\aGetRoom\x12\x0f.GetRoomRequest\x1a\x10.GetRoomResponse\x12+\n" +
 	"\x04List\x12\x10.RoomListRequest\x1a\x11.RoomListResponse\x128\n" +
@@ -625,7 +717,8 @@ const file_room_proto_rawDesc = "" +
 	"\n" +
 	"UpdateRoom\x12\x12.UpdateRoomRequest\x1a\x13.UpdateRoomResponse\x129\n" +
 	"\tOrderBook\x12\x15.OrderBookListRequest\x1a\x15.OrderBookListRequest\x12)\n" +
-	"\x06Profit\x12\x0e.ProfitRequest\x1a\x0f.ProfitResponseBCZAgithub.com/Crows-Storm/scoreboard/internal/common/genproto/roompbb\x06proto3"
+	"\x06Profit\x12\x0e.ProfitRequest\x1a\x0f.ProfitResponse\x122\n" +
+	"\tInTheRoom\x12\x11.InTheRoomRequest\x1a\x12.InTheRoomResponseBCZAgithub.com/Crows-Storm/scoreboard/internal/common/genproto/roompbb\x06proto3"
 
 var (
 	file_room_proto_rawDescOnce sync.Once
@@ -639,7 +732,7 @@ func file_room_proto_rawDescGZIP() []byte {
 	return file_room_proto_rawDescData
 }
 
-var file_room_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_room_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_room_proto_goTypes = []any{
 	(*GetRoomRequest)(nil),        // 0: GetRoomRequest
 	(*GetRoomResponse)(nil),       // 1: GetRoomResponse
@@ -653,6 +746,8 @@ var file_room_proto_goTypes = []any{
 	(*OrderBookListResponse)(nil), // 9: OrderBookListResponse
 	(*ProfitRequest)(nil),         // 10: ProfitRequest
 	(*ProfitResponse)(nil),        // 11: ProfitResponse
+	(*InTheRoomRequest)(nil),      // 12: InTheRoomRequest
+	(*InTheRoomResponse)(nil),     // 13: InTheRoomResponse
 }
 var file_room_proto_depIdxs = []int32{
 	1,  // 0: RoomListResponse.data:type_name -> GetRoomResponse
@@ -662,14 +757,16 @@ var file_room_proto_depIdxs = []int32{
 	6,  // 4: RoomService.UpdateRoom:input_type -> UpdateRoomRequest
 	8,  // 5: RoomService.OrderBook:input_type -> OrderBookListRequest
 	10, // 6: RoomService.Profit:input_type -> ProfitRequest
-	1,  // 7: RoomService.GetRoom:output_type -> GetRoomResponse
-	3,  // 8: RoomService.List:output_type -> RoomListResponse
-	5,  // 9: RoomService.CreatedRoom:output_type -> CreatedRoomResponse
-	7,  // 10: RoomService.UpdateRoom:output_type -> UpdateRoomResponse
-	8,  // 11: RoomService.OrderBook:output_type -> OrderBookListRequest
-	11, // 12: RoomService.Profit:output_type -> ProfitResponse
-	7,  // [7:13] is the sub-list for method output_type
-	1,  // [1:7] is the sub-list for method input_type
+	12, // 7: RoomService.InTheRoom:input_type -> InTheRoomRequest
+	1,  // 8: RoomService.GetRoom:output_type -> GetRoomResponse
+	3,  // 9: RoomService.List:output_type -> RoomListResponse
+	5,  // 10: RoomService.CreatedRoom:output_type -> CreatedRoomResponse
+	7,  // 11: RoomService.UpdateRoom:output_type -> UpdateRoomResponse
+	8,  // 12: RoomService.OrderBook:output_type -> OrderBookListRequest
+	11, // 13: RoomService.Profit:output_type -> ProfitResponse
+	13, // 14: RoomService.InTheRoom:output_type -> InTheRoomResponse
+	8,  // [8:15] is the sub-list for method output_type
+	1,  // [1:8] is the sub-list for method input_type
 	1,  // [1:1] is the sub-list for extension type_name
 	1,  // [1:1] is the sub-list for extension extendee
 	0,  // [0:1] is the sub-list for field type_name
@@ -686,7 +783,7 @@ func file_room_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_room_proto_rawDesc), len(file_room_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

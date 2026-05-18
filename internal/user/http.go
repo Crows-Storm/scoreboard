@@ -17,9 +17,24 @@ type HTTPServer struct {
 	app app.Application
 }
 
+type loginRequest struct {
+	username string
+	password string
+}
+
 func (H HTTPServer) LoginUser(c *gin.Context) {
-	//TODO implement me
-	panic("implement me")
+	var req loginRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		if v, err := H.app.Queries.GetUser.Handle(c, query.GetUser{Username: req.username}); err != nil {
+			// TODO: 1. check password  2. jwt token build authResp
+			//check.ChackPassword{
+			//	repoPw: req.Password,
+			//	reqPw: v.Password,
+			//}
+			//return authResp
+			c.JSON(http.StatusOK, gin.H{"message": "Successfully!!", "data": v})
+		}
+	}
 }
 
 func (H HTTPServer) RegisterUser(c *gin.Context) {

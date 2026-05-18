@@ -14,6 +14,7 @@ type Repository interface {
 	) error
 
 	Get(ctx context.Context, id string) (*User, error)
+	GetByUsername(ctx context.Context, username string) (*User, error)
 }
 
 type NotFoundError struct {

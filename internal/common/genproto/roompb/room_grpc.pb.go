@@ -25,6 +25,7 @@ const (
 	RoomService_UpdateRoom_FullMethodName  = "/RoomService/UpdateRoom"
 	RoomService_OrderBook_FullMethodName   = "/RoomService/OrderBook"
 	RoomService_Profit_FullMethodName      = "/RoomService/Profit"
+	RoomService_InTheRoom_FullMethodName   = "/RoomService/InTheRoom"
 )
 
 // RoomServiceClient is the client API for RoomService service.
@@ -40,6 +41,7 @@ type RoomServiceClient interface {
 	// this room the order book for user id
 	OrderBook(ctx context.Context, in *OrderBookListRequest, opts ...grpc.CallOption) (*OrderBookListRequest, error)
 	Profit(ctx context.Context, in *ProfitRequest, opts ...grpc.CallOption) (*ProfitResponse, error)
+	InTheRoom(ctx context.Context, in *InTheRoomRequest, opts ...grpc.CallOption) (*InTheRoomResponse, error)
 }
 
 type roomServiceClient struct {
@@ -110,6 +112,16 @@ func (c *roomServiceClient) Profit(ctx context.Context, in *ProfitRequest, opts 
 	return out, nil
 }
 
+func (c *roomServiceClient) InTheRoom(ctx context.Context, in *InTheRoomRequest, opts ...grpc.CallOption) (*InTheRoomResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(InTheRoomResponse)
+	err := c.cc.Invoke(ctx, RoomService_InTheRoom_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RoomServiceServer is the server API for RoomService service.
 // All implementations must embed UnimplementedRoomServiceServer
 // for forward compatibility.
@@ -123,6 +135,7 @@ type RoomServiceServer interface {
 	// this room the order book for user id
 	OrderBook(context.Context, *OrderBookListRequest) (*OrderBookListRequest, error)
 	Profit(context.Context, *ProfitRequest) (*ProfitResponse, error)
+	InTheRoom(context.Context, *InTheRoomRequest) (*InTheRoomResponse, error)
 	mustEmbedUnimplementedRoomServiceServer()
 }
 
@@ -150,6 +163,9 @@ func (UnimplementedRoomServiceServer) OrderBook(context.Context, *OrderBookListR
 }
 func (UnimplementedRoomServiceServer) Profit(context.Context, *ProfitRequest) (*ProfitResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Profit not implemented")
+}
+func (UnimplementedRoomServiceServer) InTheRoom(context.Context, *InTheRoomRequest) (*InTheRoomResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method InTheRoom not implemented")
 }
 func (UnimplementedRoomServiceServer) mustEmbedUnimplementedRoomServiceServer() {}
 func (UnimplementedRoomServiceServer) testEmbeddedByValue()                     {}
@@ -280,6 +296,24 @@ func _RoomService_Profit_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RoomService_InTheRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InTheRoomRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServiceServer).InTheRoom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RoomService_InTheRoom_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServiceServer).InTheRoom(ctx, req.(*InTheRoomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // RoomService_ServiceDesc is the grpc.ServiceDesc for RoomService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -310,6 +344,10 @@ var RoomService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Profit",
 			Handler:    _RoomService_Profit_Handler,
+		},
+		{
+			MethodName: "InTheRoom",
+			Handler:    _RoomService_InTheRoom_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
